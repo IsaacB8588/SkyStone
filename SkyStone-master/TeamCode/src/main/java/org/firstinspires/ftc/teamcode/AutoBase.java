@@ -127,21 +127,16 @@ public abstract class AutoBase extends RobotHardware {
         if (power < 0){
             adjustment = -adjustment;
         }
+
+        double current = Math.toRadians(getGlobal() % 360);
         target = target * ORBITAL20_PPR * DRIVE_GEAR_RATIO / WHEEL_CIRC;
-        drive(direction, power, 0);
+        drive(direction + current, power, 0);
         while(getRightAbs() < target && getleftAbs() < target && opModeIsActive()){
 
             //get radian value of the robots angle
-            double current = Math.toRadians(getGlobal() % 360);
+            current = Math.toRadians(getGlobal() % 360);
+            drive(direction + current, power, 0);
 
-            if (Math.abs(getAngle() - heading) > 3)
-                if (getAngle() < heading){
-                    drive(direction + current, power, -adjustment);
-                } else if (getAngle() > heading){
-                    drive(direction + current, power, adjustment);
-                } else {
-                    drive(direction + current, power, 0);
-                }
         }
         stopDrive();
     }
@@ -206,14 +201,19 @@ public abstract class AutoBase extends RobotHardware {
         if (isSkystone(colorL) && !isSkystone(colorR)){
             return SkystonePosition.LEFT;
         } else if (!isSkystone(colorL) && !isSkystone(colorR)){
-            return SkystonePosition.CENTER;
-        } else if (!isSkystone(colorL) && isSkystone(colorR)){
             return SkystonePosition.RIGHT;
-        } else {
+        } else if (!isSkystone(colorL) && isSkystone(colorR)){
             return SkystonePosition.CENTER;
+        } else {
+            return SkystonePosition.RIGHT;
         }
 
 
 
+    }
+
+    protected void setCollect(double power){
+        rColl.setPower(power);
+        lColl.setPower(power);
     }
 }

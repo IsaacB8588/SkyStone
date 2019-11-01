@@ -108,6 +108,12 @@ public class CompTeleOp extends RobotHardware {
 
             }
 
+            if (gamepad2.b && gamepad2.y){
+                noCap.setPosition(0.5);
+            } else {
+                noCap.setPosition(0);
+            }
+
         }
         stop();
     }

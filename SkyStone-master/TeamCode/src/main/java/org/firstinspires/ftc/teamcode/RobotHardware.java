@@ -34,6 +34,8 @@ public abstract class RobotHardware extends RobotBase {
     protected Servo grab;
     protected Servo flip;
 
+    protected Servo noCap;
+
     protected BNO055IMU imu;
 
     protected Orientation lastAngles = new Orientation();
@@ -43,11 +45,11 @@ public abstract class RobotHardware extends RobotBase {
 
     protected int heading;
 
-    DistanceSensor distanceR;
-    ColorSensor colorR;
+    protected DistanceSensor distanceR;
+    protected ColorSensor colorR;
 
-    DistanceSensor distanceL;
-    ColorSensor colorL;
+    protected DistanceSensor distanceL;
+    protected ColorSensor colorL;
 
     //final variables for moving robot to distance
     protected final double WHEEL_DIAMTER = 4;
@@ -75,6 +77,11 @@ public abstract class RobotHardware extends RobotBase {
         lfDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         lbDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        rfDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rbDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        lfDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        lbDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
         rColl = hardwareMap.dcMotor.get("rc");
         lColl = hardwareMap.dcMotor.get("lc");
 
@@ -92,6 +99,9 @@ public abstract class RobotHardware extends RobotBase {
 
         flip = hardwareMap.servo.get("flip");
         flip.setPosition(1);
+
+        noCap= hardwareMap.servo.get("noCap");
+        noCap.setPosition(0);
 
         colorR = hardwareMap.get(ColorSensor.class, "colorr");
         distanceR = hardwareMap.get(DistanceSensor.class, "colorr");

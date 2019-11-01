@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode.OpModes.Auto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.AutoBase;
 import org.firstinspires.ftc.teamcode.RobotRunType;
 
+@Disabled
 @Autonomous(name = "test")
 public class TestAuto extends AutoBase {
 
@@ -22,7 +24,7 @@ public class TestAuto extends AutoBase {
         turnHeading(0.3, -90);
         turnHeading(0.15, -90);
         //drive
-        driveVector(8, -90, 0.5, 0, -90);
+        driveVector(8, 270, 0.5, 0, -90);
         driveVector(20, 0, 0.4, 0, -90);
 
         lColl.setPower(1);
