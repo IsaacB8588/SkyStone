@@ -114,6 +114,14 @@ public class CompTeleOp extends RobotHardware {
                 noCap.setPosition(0);
             }
 
+            if (gamepad1.right_bumper){
+                hookL.setPosition(1);
+                hookR.setPosition(0);
+            } else if (gamepad1.left_bumper){
+                hookL.setPosition(0);
+                hookR.setPosition(1);
+            }
+
         }
         stop();
     }

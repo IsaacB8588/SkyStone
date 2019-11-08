@@ -216,4 +216,14 @@ public abstract class AutoBase extends RobotHardware {
         rColl.setPower(power);
         lColl.setPower(power);
     }
+
+    protected  void setHooks(boolean grab){
+        if (grab){
+            hookL.setPosition(1);
+            hookR.setPosition(0);
+        } else {
+            hookL.setPosition(0);
+            hookR.setPosition(1);
+        }
+    }
 }

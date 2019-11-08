@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.RobotRunType;
 import org.firstinspires.ftc.teamcode.Tests.SkystonePosition;
 
 @Autonomous(name = "blue auto")
-public class CompBlue extends AutoBase {
+public class BlockBlue extends AutoBase {
 
     public void runOpMode(){
 

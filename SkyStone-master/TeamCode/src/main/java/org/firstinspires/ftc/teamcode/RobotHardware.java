@@ -36,6 +36,9 @@ public abstract class RobotHardware extends RobotBase {
 
     protected Servo noCap;
 
+    protected Servo hookL;
+    protected Servo hookR;
+
     protected BNO055IMU imu;
 
     protected Orientation lastAngles = new Orientation();
@@ -102,6 +105,11 @@ public abstract class RobotHardware extends RobotBase {
 
         noCap= hardwareMap.servo.get("noCap");
         noCap.setPosition(0);
+
+        hookL = hardwareMap.servo.get("hl");
+        hookR = hardwareMap.servo.get("hr");
+        hookL.setPosition(0);
+        hookR.setPosition(1);
 
         colorR = hardwareMap.get(ColorSensor.class, "colorr");
         distanceR = hardwareMap.get(DistanceSensor.class, "colorr");
