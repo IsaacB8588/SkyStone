@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 
+
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
@@ -64,7 +65,6 @@ public abstract class RobotHardware extends RobotBase {
     protected final double STRAFE_RATIO = 1;
     protected final double TURN_RATIO = 0.7;
 
-    @Override
     public void initRobot (RobotRunType robotRunType){
 
         rfDrive = hardwareMap.dcMotor.get("rf");
