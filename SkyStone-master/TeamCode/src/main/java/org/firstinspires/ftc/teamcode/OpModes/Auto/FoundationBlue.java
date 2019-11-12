@@ -6,7 +6,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.AutoBase;
 import org.firstinspires.ftc.teamcode.RobotRunType;
 
-@Autonomous(name = "foundation blue")
+@Autonomous(name = "blue foundation")
 public class FoundationBlue extends AutoBase {
 
     public void runOpMode(){
@@ -14,10 +14,11 @@ public class FoundationBlue extends AutoBase {
 
         waitForStart();
 
-        driveVector(31, 180, 0.2, 0, 180);
+        driveVector(20, 90, 0.3, 0, 180);
+        driveVector(31.4, 180, 0.2, 0, 180);
         setHooks(true);
         waitSec(1);
-        driveVector(32, 0, 0.3, 0, 0);
+        driveVector(32, 0, 0.25, 0, 0);
         drive(0);
         setHooks(false);
         turnHeading(0.15, 0);

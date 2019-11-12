@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.teamcode.RobotHardware;
 import org.firstinspires.ftc.teamcode.RobotRunType;
 
-@TeleOp(name = "TeleOp Test")
+@TeleOp(name = "Competition TeleOp")
 public class CompTeleOp extends RobotHardware {
 
     public void runOpMode(){

@@ -5,14 +5,15 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.AutoBase;
 import org.firstinspires.ftc.teamcode.RobotRunType;
 
-@Autonomous(name = "red foundation")
-public class FoundationRed extends AutoBase {
+@Autonomous(name = "red foundation - 10")
+public class FoundationRed10 extends AutoBase {
 
     public void runOpMode(){
         initRobot(RobotRunType.AUTONOMOUS);
 
         waitForStart();
 
+        waitSec(10);
         driveVector(20, -90, 0.3, 0, 180);
 
         driveVector(31.4, 180, 0.2, 0, 180);

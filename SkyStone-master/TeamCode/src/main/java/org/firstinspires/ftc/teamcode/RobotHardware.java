@@ -14,8 +14,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
-import java.util.concurrent.BrokenBarrierException;
-
 public abstract class RobotHardware extends RobotBase {
 
     //declare hardware
@@ -61,10 +59,16 @@ public abstract class RobotHardware extends RobotBase {
     protected final double ORBITAL20_PPR = 537.6;
     protected final double DRIVE_GEAR_RATIO = 1;
 
-    protected final double FORWARD_RATIO = 1;
-    protected final double STRAFE_RATIO = 1;
-    protected final double TURN_RATIO = 0.7;
+    protected double FORWARD_RATIO = 1;
+    protected double STRAFE_RATIO = 1;
+    protected double TURN_RATIO = 0.7;
 
+    int toggleCount = 0;
+    boolean toggleSpeed = false;
+
+    private boolean escapeClause = false;
+
+    @Override
     public void initRobot (RobotRunType robotRunType){
 
         rfDrive = hardwareMap.dcMotor.get("rf");
@@ -134,9 +138,13 @@ public abstract class RobotHardware extends RobotBase {
         telemetry.update();
 
         //post to telemetry when gyro is calibrated
-        while (!isStopRequested() && !imu.isGyroCalibrated()){
+        while (!isStopRequested() && !imu.isGyroCalibrated() && !escapeClause){
             sleep(50);
             idle();
+
+            if (gamepad1.right_bumper && gamepad1.left_bumper){
+                escapeClause = true;
+            }
         }
 
         telemetry.addData("Mode", "waiting for start");
@@ -250,20 +258,36 @@ public abstract class RobotHardware extends RobotBase {
      */
     protected void FieldCentricDrive(){
 
-        double turnRatio = 0.7;
-        if (gamepad1.right_bumper){
-            turnRatio = 0.3;
+
+        if (gamepad1.y){
+            toggleCount++;
+        } else {
+            toggleCount = 0;
         }
 
+        if (toggleCount == 1){
+            toggleSpeed = !toggleSpeed;
+            if (!toggleSpeed){
+                TURN_RATIO = 0.7;
+                FORWARD_RATIO = 1;
+                STRAFE_RATIO = 1;
+            } else {
+                TURN_RATIO = 0.3;
+                FORWARD_RATIO = 0.5;
+                STRAFE_RATIO = 0.5;
+            }
+        }
+
+
         //pull coordinate values from x and y axis of joystick
-        double x1 = gamepad1.left_stick_x, y1 = -gamepad1.left_stick_y;
+        double x1 = gamepad1.left_stick_x * STRAFE_RATIO, y1 = -gamepad1.left_stick_y * FORWARD_RATIO;
         //create polar vector of given the joystick values
         double v = Math.sqrt(x1 * x1 + y1 * y1);
         double theta = Math.atan2(x1, y1);
         //get radian value of the robots angle
         double current = Math.toRadians(getGlobal() % 360);
         //apply values to vector-based holonomic drive
-        drive(theta + current, v, gamepad1.right_stick_x * turnRatio);
+        drive(theta + current, v, gamepad1.right_stick_x * TURN_RATIO);
     }
 
     /**
