@@ -91,9 +91,9 @@ public abstract class AutoBase extends RobotHardware {
 
                 double degreesLeft = Math.abs(getGlobal() - heading);
                 if (getGlobal() - heading > 2) {
-                    rot = ((degreesLeft/35)*(rot - 0.05) + 0.05);
+                    rot = ((degreesLeft/35)*(rot - 0.1) + 0.1);
                 } else if (getGlobal() - heading < 2) {
-                    rot = -((degreesLeft/35)*(rot - 0.05) + 0.05);
+                    rot = -((degreesLeft/35)*(rot - 0.1) + 0.1);
                 } else {
                     rot = 0;
                 }
@@ -107,7 +107,7 @@ public abstract class AutoBase extends RobotHardware {
                 //drive at full power
             } else if (decelerate){
                 //decelerate for last 18 inches
-                power = (ticksLeft/(ORBITAL20_PPR * 1.5)) * (power - 0.15) + 0.15;
+                power = (ticksLeft/(ORBITAL20_PPR * 1.5)) * (power - 0.2) + 0.2;
             }
 
             drive(direction + current, power, rot);
@@ -162,6 +162,29 @@ public abstract class AutoBase extends RobotHardware {
             telemetry.addData("Heading: ", heading);
             telemetry.update();
         }
+
+        stopDrive();
+        waitSec(0.25);
+        //turn while scaling down the power as it approaches the target
+        while (opModeIsActive() && Math.abs(heading - degreeTarget) > 1) {
+
+
+            double degreesLeft = Math.abs(heading - degreeTarget);
+            double newPower = (degreesLeft/30)*(power - 0.1) + 0.1;
+
+            if (heading > degreeTarget) {
+                setDrivePower(-newPower, newPower, -newPower, newPower);
+            }
+            if (heading < degreeTarget) {
+                setDrivePower(newPower, -newPower, newPower, -newPower);
+            }
+            heading = getAngle();
+            double angle = getGlobal();
+
+            telemetry.addData("Heading: ", heading);
+            telemetry.update();
+        }
+
         stopDrive();
 
         telemetry.addLine("Turned to " + degreeTarget + " degrees");
