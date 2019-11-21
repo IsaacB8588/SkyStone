@@ -117,10 +117,13 @@ public class CompTeleOp extends RobotHardware {
             if (gamepad1.right_bumper){
                 hookL.setPosition(1);
                 hookR.setPosition(0);
-            } else if (gamepad1.left_bumper){
+            } else if (gamepad1.left_bumper) {
                 hookL.setPosition(0);
                 hookR.setPosition(1);
             }
+
+            telemetry.addData("current", getGlobal() % 360);
+            telemetry.update();
 
         }
         stop();

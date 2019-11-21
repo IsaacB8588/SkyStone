@@ -9,11 +9,13 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.teamcode.Tests.SkystonePosition;
 
+
 public abstract class AutoBase extends RobotHardware {
 
     /**
      * resets the drive motor encoders
      */
+
     protected void resetEncoders() {
         rfDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lfDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -26,7 +28,7 @@ public abstract class AutoBase extends RobotHardware {
         rbDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         lbDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         while (opModeIsActive() && rfDrive.getMode() != DcMotor.RunMode.RUN_WITHOUT_ENCODER && lfDrive.getMode() != DcMotor.RunMode.RUN_WITHOUT_ENCODER) {
-            //waiting
+            //waiting for changes to finish
         }
     }
 
@@ -47,95 +49,71 @@ public abstract class AutoBase extends RobotHardware {
     }
 
     /**
-     * sets all of the drive motors to the same value
-     * @param power power in which the drive motors will be set to
-     */
-
-    /**
      * pauses the code for a set amount of seconds
      * @param seconds time to wait before resuming code
      */
     protected void waitSec(double seconds) {
         ElapsedTime t = new ElapsedTime(System.nanoTime());
-        while (opModeIsActive() && t.time() <= seconds) {
-
-        }
+        while (opModeIsActive() && t.time() <= seconds) { }
     }
 
+    /**
+     * sets all of the drive motors to the same value
+     * @param power power in which the drive motors will be set to
+     */
     protected void drive(double power) {
         setDrivePower(power, power, power, power);
     }
 
-    /**
-     * drives the robot in a straight line for a given distance
-     * @param power speed which the robot should move at
-     * @param inches target for which the robot should try to stop at
-     */
-    protected void drive(double power, double inches) {
-        resetEncoders();
-        drive(power);
-        double targetPosition = inches * ORBITAL20_PPR * DRIVE_GEAR_RATIO / WHEEL_CIRC;
-        double starting = getAngle();
-        double right = power;
-        double left = power;
-        while (opModeIsActive() && getleftAbs() <= targetPosition && getRightAbs() <= targetPosition) {
-            double delta = starting - getAngle();
-            right = power + (delta / 40);
-            left = power - (delta / 40);
-
-            if (Math.abs(right) > 1 || Math.abs(left) > 1) {
-                right /= Math.max(right, left);
-                left /= Math.max(right, left);
-            }
-            setDrivePower(right, left, right, left);
-        }
-        stopDrive();
-        telemetry.addLine("Drove " + inches + " inches to target");
-        telemetry.update();
-    }
-
-    /**
-     * moves the robot straight laterally at a given power and distance
-     * @param power speed at which it should move
-     * @param rotations number of rotations the wheels should spin
-     */
-    protected void strafeRot(double power, double rotations) {
-        resetEncoders();
-        waitSec(0.2);
-        setDrivePower(-power, power, power, -power);
-        double targetPosition = rotations * ORBITAL20_PPR * DRIVE_GEAR_RATIO;
-
-        while (Math.abs((double)rfDrive.getCurrentPosition()) <= targetPosition) {
-
-        }
-        stopDrive();
-        telemetry.addLine("Strafed " + rotations + " Rotations to target");
-        telemetry.update();
-    }
-
-
-    protected void driveVector(double target, double direction, double power, double rot, int heading){
+    protected void driveVector(double target, double direction, double power, double rot, int heading, boolean decelerate){
         resetEncoders();
         direction = Math.toRadians(direction);
-        double adjustment;
-
-        if (rot == 0){
-            adjustment = power/2;
-        } else {
-            adjustment = power;
-        }
-        if (power < 0){
-            adjustment = -adjustment;
-        }
-
         double current = Math.toRadians(getGlobal() % 360);
         target = target * ORBITAL20_PPR * DRIVE_GEAR_RATIO / WHEEL_CIRC;
+
         drive(direction + current, power, 0);
         while(getRightAbs() < target && getleftAbs() < target && opModeIsActive()){
 
             //get radian value of the robots angle
             current = Math.toRadians(getGlobal() % 360);
-            drive(direction + current, power, 0);
+
+            if (Math.abs(getGlobal() - heading) > 35){
+
+                if (getGlobal() > heading) {
+                    rot = power;
+                } else if (getGlobal() < heading) {
+                    rot = -power;
+                } else {
+                    rot = 0;
+                }
+
+            } else {
+
+                double degreesLeft = Math.abs(getGlobal() - heading);
+                if (getGlobal() - heading > 2) {
+                    rot = ((degreesLeft/35)*(rot - 0.05) + 0.05);
+                } else if (getGlobal() - heading < 2) {
+                    rot = -((degreesLeft/35)*(rot - 0.05) + 0.05);
+                } else {
+                    rot = 0;
+                }
+                telemetry.addData("degrees left ", degreesLeft);
+
+            }
+
+            double ticksLeft = Math.abs(target - (Math.max(getRightAbs(), getleftAbs())));
+
+            if (ticksLeft > ORBITAL20_PPR * 1.5){
+                //drive at full power
+            } else if (decelerate){
+                //decelerate for last 18 inches
+                power = (ticksLeft/(ORBITAL20_PPR * 1.5)) * (power - 0.15) + 0.15;
+            }
+
+            drive(direction + current, power, rot);
+            telemetry.addData("currentAngle", getGlobal());
+            telemetry.addData("rot", rot);
+            telemetry.update();
 
         }
         stopDrive();
@@ -149,8 +127,9 @@ public abstract class AutoBase extends RobotHardware {
     protected void turnHeading(double power, int degreeTarget) {
         heading = getAngle();
 
-        //turn until gyro value is met
-        while (opModeIsActive() && Math.abs(heading - degreeTarget) > 0) {
+        //turn at full power until within 30 degrees of target
+        while (opModeIsActive() && Math.abs(heading - degreeTarget) > 30) {
+
             if (heading > degreeTarget) {
                 setDrivePower(-power, power, -power, power);
             }
@@ -158,11 +137,36 @@ public abstract class AutoBase extends RobotHardware {
                 setDrivePower(power, -power, power, -power);
             }
             heading = getAngle();
+            double angle = getGlobal();
+
+            telemetry.addData("Heading: ", heading);
+            telemetry.update();
+        }
+
+        //turn while scaling down the power as it approaches the target
+        while (opModeIsActive() && Math.abs(heading - degreeTarget) > 1) {
+
+
+            double degreesLeft = Math.abs(heading - degreeTarget);
+            double newPower = (degreesLeft/30)*(power - 0.1) + 0.1;
+
+            if (heading > degreeTarget) {
+                setDrivePower(-newPower, newPower, -newPower, newPower);
+            }
+            if (heading < degreeTarget) {
+                setDrivePower(newPower, -newPower, newPower, -newPower);
+            }
+            heading = getAngle();
+            double angle = getGlobal();
+
+            telemetry.addData("Heading: ", heading);
+            telemetry.update();
         }
         stopDrive();
-        telemetry.addLine("Turned " + degreeTarget + "degrees to target");
+
+        telemetry.addLine("Turned to " + degreeTarget + " degrees");
         telemetry.update();
-        resetAngle();
+
     }
 
     /**
@@ -194,7 +198,7 @@ public abstract class AutoBase extends RobotHardware {
     }
 
     /**
-     * scans and returns skystone position
+     * scans and returns skystone position using color sensors
      */
     protected SkystonePosition skystonePosition (){
 
@@ -207,16 +211,21 @@ public abstract class AutoBase extends RobotHardware {
         } else {
             return SkystonePosition.RIGHT;
         }
-
-
-
     }
 
+    /**
+     * turns on both wheels of the collector at a set power
+     * @param power speed to turn the wheels at
+     */
     protected void setCollect(double power){
         rColl.setPower(power);
         lColl.setPower(power);
     }
 
+    /**
+     * sets the foundation hooks to open or closed
+     * @param grab
+     */
     protected  void setHooks(boolean grab){
         if (grab){
             hookL.setPosition(1);
@@ -225,5 +234,22 @@ public abstract class AutoBase extends RobotHardware {
             hookL.setPosition(0);
             hookR.setPosition(1);
         }
+    }
+
+    /**
+     * moves the robot in a arc of a set radius
+     */
+    protected void turnArc(double radius, double power, double angle){
+
+        int targetR = (int) ((ORBITAL20_PPR/WHEEL_CIRC) * ((radius + 7) * 2 * Math.PI * (angle / 360)));
+        int targetL = (int) ((ORBITAL20_PPR/WHEEL_CIRC) * ((radius - 7) * 2 * Math.PI * (angle / 360)));
+
+
+        do{
+            setDrivePower(((radius + 7) / Math.max((radius + 7), (radius - 7)) * power), ((radius - 7) / Math.max((radius + 7), (radius - 7)) * power), ((radius + 7) / Math.max((radius + 7), (radius - 7)) * power), ((radius - 7) / Math.max((radius + 7), (radius - 7)) * power));
+
+        }while(Math.abs(getAngle()) < Math.abs(angle) && opModeIsActive());
+
+        setDrivePower(0,0,0,0 );
     }
 }
