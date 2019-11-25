@@ -107,7 +107,8 @@ public abstract class AutoBase extends RobotHardware {
                 //drive at full power
             } else if (decelerate){
                 //decelerate for last 18 inches
-                power = (ticksLeft/(ORBITAL20_PPR * 1.5)) * (power - 0.2) + 0.2;
+                power = (ticksLeft/(ORBITAL20_PPR * (0.15 + Math.abs(Math.cos(Math.toRadians(direction))))))
+                        * (power - (0.15 + Math.abs(Math.cos(Math.toRadians(direction))))) + 0.15;
             }
 
             drive(direction + current, power, rot);
@@ -164,7 +165,7 @@ public abstract class AutoBase extends RobotHardware {
         }
 
         stopDrive();
-        waitSec(0.25);
+        waitSec(0.4);
         //turn while scaling down the power as it approaches the target
         while (opModeIsActive() && Math.abs(heading - degreeTarget) > 1) {
 
