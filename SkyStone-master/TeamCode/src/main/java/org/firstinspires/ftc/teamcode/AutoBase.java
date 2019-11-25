@@ -107,8 +107,8 @@ public abstract class AutoBase extends RobotHardware {
                 //drive at full power
             } else if (decelerate){
                 //decelerate for last 18 inches
-                power = (ticksLeft/(ORBITAL20_PPR * (0.15 + Math.abs(Math.cos(Math.toRadians(direction))))))
-                        * (power - (0.15 + Math.abs(Math.cos(Math.toRadians(direction))))) + 0.15;
+                power = (ticksLeft/(ORBITAL20_PPR * (0.15 + Math.abs(Math.cos(direction + current)))))
+                        * (power - (0.15 + Math.abs(Math.cos(direction + current)))) + 0.15;
             }
 
             drive(direction + current, power, rot);
