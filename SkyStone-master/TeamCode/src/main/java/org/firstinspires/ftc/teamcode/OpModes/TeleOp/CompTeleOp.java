@@ -55,11 +55,8 @@ public class CompTeleOp extends RobotHardware {
 
             }
 
-
             //use left joystick to run the elevator
             spool.setPower(-gamepad2.left_stick_y);
-
-
 
             if (gamepad2.a){
                 grabCount++;

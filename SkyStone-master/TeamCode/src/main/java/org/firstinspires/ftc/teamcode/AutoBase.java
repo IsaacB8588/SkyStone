@@ -286,7 +286,7 @@ public abstract class AutoBase extends RobotHardware {
      * @param grab
      */
     protected  void setHooks(boolean grab){
-        if (!grab){
+        if (grab){
             hookL.setPosition(1);
             hookR.setPosition(0);
         } else {

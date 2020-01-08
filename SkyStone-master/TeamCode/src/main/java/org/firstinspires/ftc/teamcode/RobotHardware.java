@@ -106,8 +106,8 @@ public abstract class RobotHardware extends RobotBase {
 
         hookL = hardwareMap.servo.get("hl");
         hookR = hardwareMap.servo.get("hr");
-        hookL.setPosition(1);
-        hookR.setPosition(0);
+        hookL.setPosition(0);
+        hookR.setPosition(1);
 
         stoneArm = hardwareMap.servo.get("stone");
 
