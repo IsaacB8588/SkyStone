@@ -5,9 +5,7 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
-import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.Servo;
-
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
@@ -27,9 +25,6 @@ public abstract class RobotHardware extends RobotBase {
 
     protected DcMotor spool;
 
-    protected Servo lfeeder;
-    protected Servo rfeeder;
-
     protected Servo grab;
     protected Servo flip;
 
@@ -37,6 +32,8 @@ public abstract class RobotHardware extends RobotBase {
 
     protected Servo hookL;
     protected Servo hookR;
+
+    protected Servo stoneArm;
 
     protected BNO055IMU imu;
 
@@ -98,22 +95,21 @@ public abstract class RobotHardware extends RobotBase {
 
         spool.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        lfeeder = hardwareMap.servo.get("feedl");
-        rfeeder = hardwareMap.servo.get("feedr");
-
         grab = hardwareMap.servo.get("grab");
         grab.setPosition(0);
 
         flip = hardwareMap.servo.get("flip");
-        flip.setPosition(1);
+        flip.setPosition(0);
 
         noCap= hardwareMap.servo.get("noCap");
-        noCap.setPosition(0);
+        noCap.setPosition(1);
 
         hookL = hardwareMap.servo.get("hl");
         hookR = hardwareMap.servo.get("hr");
-        hookL.setPosition(0);
-        hookR.setPosition(1);
+        hookL.setPosition(1);
+        hookR.setPosition(0);
+
+        stoneArm = hardwareMap.servo.get("stone");
 
         colorR = hardwareMap.get(ColorSensor.class, "colorr");
         distanceR = hardwareMap.get(DistanceSensor.class, "colorr");
@@ -136,6 +132,10 @@ public abstract class RobotHardware extends RobotBase {
         //post to telemetry when gyro is calibrating
         telemetry.addData("Mode", "Calibrating");
         telemetry.update();
+
+        if (robotRunType == RobotRunType.AUTONOMOUS){
+            stoneArm.setPosition(0);
+        }
 
         //post to telemetry when gyro is calibrated
         while (!isStopRequested() && !imu.isGyroCalibrated() && !escapeClause){

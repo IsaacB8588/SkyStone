@@ -40,50 +40,34 @@ public class CompTeleOp extends RobotHardware {
             //////////////////////////
 
             //run collector with right bumper
-            if (gamepad2.right_bumper){
-                lColl.setPower(1);
-                rColl.setPower(1);
-                lfeeder.setPosition(1);
-                rfeeder.setPosition(0);
+            if (gamepad2.left_bumper){
+                lColl.setPower(0.55);
+                rColl.setPower(0.55);
 
             //reverse collector with left bumper
-            } else if (gamepad2.left_bumper){
-                lColl.setPower(-1);
-                rColl.setPower(-1);
-                lfeeder.setPosition(0);
-                rfeeder.setPosition(1);
+            } else if (gamepad2.right_bumper){
+                lColl.setPower(-0.55);
+                rColl.setPower(-0.55);
 
             } else {
                 lColl.setPower(0);
                 rColl.setPower(0);
-                lfeeder.setPosition(0.5);
-                rfeeder.setPosition(0.5);
 
             }
 
-            //use down on dpad to quickly collapse the elevator
-            if (gamepad2.dpad_down){
-                if (spool.getCurrentPosition() > 15){
-                    if (spool.getCurrentPosition() > 130){
-                        spool.setPower(-1);
-                    } else {
-                        spool.setPower(-0.2);
-                    }
-                } else {
-                    spool.setPower(0);
-                }
-            } else {
-                //use left joystick to run the elevator
-                spool.setPower(-gamepad2.left_stick_y);
-            }
 
-            if (gamepad2.x){
+            //use left joystick to run the elevator
+            spool.setPower(-gamepad2.left_stick_y);
+
+
+
+            if (gamepad2.a){
                 grabCount++;
             } else {
                 grabCount = 0;
             }
 
-            if (gamepad2.a){
+            if (gamepad2.x){
                 flipCount++;
             } else {
                 flipCount = 0;
@@ -92,7 +76,7 @@ public class CompTeleOp extends RobotHardware {
             if (grabCount == 1){
                 grabbing = !grabbing;
                 if (!grabbing){
-                    grab.setPosition(0);
+                    grab.setPosition(0.3);
                 } else {
                     grab.setPosition(1);
                 }
@@ -108,10 +92,10 @@ public class CompTeleOp extends RobotHardware {
 
             }
 
-            if (gamepad2.b && gamepad2.y){
-                noCap.setPosition(0.5);
-            } else {
+            if(gamepad2.dpad_up){
                 noCap.setPosition(0);
+            } else if (gamepad2.dpad_down){
+                noCap.setPosition(1);
             }
 
             if (gamepad1.right_bumper){

@@ -107,8 +107,44 @@ public abstract class AutoBase extends RobotHardware {
                 //drive at full power
             } else if (decelerate){
                 //decelerate for last 18 inches
-                power = (ticksLeft/(ORBITAL20_PPR * 1.5)) * (power - (0.15 + Math.abs(Math.cos(direction + current)))) + (0.15 + Math.abs(Math.cos(direction + current)));
+                //power = (ticksLeft/(ORBITAL20_PPR * 1.5)) * (power - (0.15 + Math.abs(Math.cos(direction + current)))) + (0.15 + Math.abs(Math.cos(direction + current)));
+                power = (ticksLeft/(ORBITAL20_PPR * 1.5)) * (power - 0.2) + (0.2);
+
             }
+
+
+            drive(direction + current, power, rot);
+            telemetry.addData("currentAngle", getGlobal());
+            telemetry.addData("rot", rot);
+            telemetry.update();
+
+        }
+        stopDrive();
+    }
+
+    protected void driveVectorRot(double target, double direction, double power, double rot, int heading, boolean decelerate){
+        resetEncoders();
+        direction = Math.toRadians(direction);
+        double current = Math.toRadians(getGlobal() % 360);
+        target = target * ORBITAL20_PPR * DRIVE_GEAR_RATIO / WHEEL_CIRC;
+
+        drive(direction + current, power, 0);
+        while(getRightAbs() < target && getleftAbs() < target && opModeIsActive()){
+
+            //get radian value of the robots angle
+            current = Math.toRadians(getGlobal() % 360);
+
+            double ticksLeft = Math.abs(target - (Math.max(getRightAbs(), getleftAbs())));
+
+            if (ticksLeft > ORBITAL20_PPR * 1.5){
+                //drive at full power
+            } else if (decelerate){
+                //decelerate for last 18 inches
+                //power = (ticksLeft/(ORBITAL20_PPR * 1.5)) * (power - (0.15 + Math.abs(Math.cos(direction + current)))) + (0.15 + Math.abs(Math.cos(direction + current)));
+                power = (ticksLeft/(ORBITAL20_PPR * 1.5)) * (power - 0.2) + (0.2);
+
+            }
+
 
             drive(direction + current, power, rot);
             telemetry.addData("currentAngle", getGlobal());
@@ -250,7 +286,7 @@ public abstract class AutoBase extends RobotHardware {
      * @param grab
      */
     protected  void setHooks(boolean grab){
-        if (grab){
+        if (!grab){
             hookL.setPosition(1);
             hookR.setPosition(0);
         } else {
