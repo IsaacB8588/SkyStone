@@ -44,12 +44,6 @@ public abstract class RobotHardware extends RobotBase {
 
     protected int heading;
 
-    protected DistanceSensor distanceR;
-    protected ColorSensor colorR;
-
-    protected DistanceSensor distanceL;
-    protected ColorSensor colorL;
-
     //final variables for moving robot to distance
     protected final double WHEEL_DIAMTER = 4;
     protected final double WHEEL_CIRC = WHEEL_DIAMTER*Math.PI;
@@ -96,7 +90,7 @@ public abstract class RobotHardware extends RobotBase {
         spool.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         grab = hardwareMap.servo.get("grab");
-        grab.setPosition(0);
+        grab.setPosition(0.3);
 
         flip = hardwareMap.servo.get("flip");
         flip.setPosition(0);
@@ -110,12 +104,6 @@ public abstract class RobotHardware extends RobotBase {
         hookR.setPosition(1);
 
         stoneArm = hardwareMap.servo.get("stone");
-
-        colorR = hardwareMap.get(ColorSensor.class, "colorr");
-        distanceR = hardwareMap.get(DistanceSensor.class, "colorr");
-
-        colorL = hardwareMap.get(ColorSensor.class, "colorl");
-        distanceL = hardwareMap.get(DistanceSensor.class, "colorl");
 
         //initialize gyro
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();

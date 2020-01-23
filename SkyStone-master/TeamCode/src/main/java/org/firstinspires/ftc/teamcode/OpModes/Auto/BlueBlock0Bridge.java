@@ -13,168 +13,65 @@ public class BlueBlock0Bridge extends AutoBase {
     public void runOpMode() {
 
         initRobot(RobotRunType.AUTONOMOUS);
+        initVuforia();
+        initTfod();
+        if (tfod != null) {
+            tfod.activate();
+        }
 
-        String position = "";
         waitForStart();
 
-        //drive forward to blocks
-        driveVector(24.2, 0, 0.4, 0, 0, true);
-        turnHeading(0.2, 0);
+        driveVectorRot(24, 0, 0.5, 0, 0, true);
+        waitSec(2);
+        SkystonePosition position = getSkyPos(true);
+        grab.setPosition(0.55);
 
-        while (distanceL.getDistance(DistanceUnit.CM) > 4 && distanceR.getDistance(DistanceUnit.CM) > 4 && opModeIsActive()) {
-            drive(0.2);
-        }
-        drive(0);
+        if (position == SkystonePosition.LEFT){
 
-        waitSec(0.25);
-        //scan blocks
-        SkystonePosition scan = skystonePosition();
-        driveVector(2, 180, 0.2, 0, 0, true);
-
-
-        if (scan == SkystonePosition.LEFT){
-
-            telemetry.addData("Position: ", "L");
-            telemetry.update();
-
-            driveVector(5.15, 270, 0.6, 0, 0, true);
-            turnHeading(0.3, -35);
-            lColl.setPower(1);
-            rColl.setPower(1);
-            driveVectorRot(30, 0, 0.4, 0, 45 , false);
-            turnHeading(0.3, 0);
-            lColl.setPower(0);
-            rColl.setPower(0);
-            driveVector(17, 180, 0.3, 0, 0, false);
-
-
-            turnHeading(0.3, 90);
-            driveVector(43, 270, 0.7, 0, 90, true);
+            driveVector(16, 90, 0.4, 0, 0, true);
+            turnHeading(0.4, 45);
             setCollect(-0.6);
-
-            waitSec(1);
+            driveVector(24, 0, 0.3, 0, 45, false);
             setCollect(0);
-            lColl.setPower(0);
-            rColl.setPower(0);
+            turnHeading(0.4, 90);
+            driveVector(20, 180, 0.4, 0, 90, true);
+            driveVector(64, -90, 0.5, 0, 90, true);
+            setCollect(0.8);
+            driveVector(27, 90, 0.5, 0, 90, true);
+            setCollect(0);
+            stop();
 
-            driveVector(42.75, 90, 0.7, 0, 90, true);
-            turnHeading(0.3, -35);
-            lColl.setPower(1);
-            rColl.setPower(1);
-            driveVectorRot(27, 0, 0.4, 0, 45 , false);
-            turnHeading(0.4, 0);
-            lColl.setPower(0);
-            rColl.setPower(0);
-            driveVector(12, 180, 0.4, 0, 0, false);
+        } else if (position == SkystonePosition.CENTER){
 
-            turnHeading(0.3, 90);
-            driveVector(64, 270, 0.7, 0, 90, true);
+            driveVector(24.5, 90, 0.4, 0, 0, true);
+            turnHeading(0.4, 45);
             setCollect(-0.6);
-
-            waitSec(1);
+            driveVector(24, 0, 0.3, 0, 45, false);
             setCollect(0);
-            lColl.setPower(0);
-            rColl.setPower(0);
-
-            driveVectorRot(8, 90, 0.7, 0, 90, false);
-
-
-        } else if (scan == SkystonePosition.CENTER){
-
-            telemetry.addData("Position: ", "C");
-            telemetry.update();
-
-            driveVector(4.75, 270, 0.6, 0, 0, true);
-            turnHeading(0.3, -35);
-            lColl.setPower(1);
-            rColl.setPower(1);
-            driveVectorRot(30, 0, 0.4, 0, 45 , false);
-            turnHeading(0.3, 0);
-            lColl.setPower(0);
-            rColl.setPower(0);
-            driveVector(17, 180, 0.3, 0, 0, false);
-
-
-            turnHeading(0.3, 90);
-            driveVector(45, 270, 0.7, 0, 90, true);
-            setCollect(-0.6);
-
-            waitSec(2);
+            turnHeading(0.4, 90);
+            driveVector(20, 180, 0.4, 0, 90, true);
+            driveVector(72, -90, 0.5, 0, 90, true);
+            setCollect(0.8);
+            driveVector(27, 90, 0.5, 0, 90, true);
             setCollect(0);
-            lColl.setPower(0);
-            rColl.setPower(0);
-
-            driveVector(45.25, 90, 0.7, 0, 90, true);
-            turnHeading(0.3, -35);
-            lColl.setPower(1);
-            rColl.setPower(1);
-            driveVectorRot(27, 0, 0.4, 0, 45 , false);
-            turnHeading(0.4, 0);
-            lColl.setPower(0);
-            rColl.setPower(0);
-            driveVector(10.5, 180, 0.4, 0, 0, false);
-
-            turnHeading(0.3, 90);
-            driveVector(69, 270, 0.7, 0, 90, true);
-            setCollect(-0.6);
-
-            waitSec(1);
-            setCollect(0);
-            lColl.setPower(0);
-            rColl.setPower(0);
-
-            driveVectorRot(8, 90, 0.7, 0, 90, false);
-
+            stop();
 
         } else {
 
-            telemetry.addData("Position: ", "R");
-            telemetry.update();
-
-            driveVector(4.55, 90, 0.6, 0, 0, true);
-            turnHeading(0.3, -35);
-            lColl.setPower(1);
-            rColl.setPower(1);
-            driveVectorRot(30, 0, 0.4, 0, 45 , false);
-            turnHeading(0.3, 0);
-            lColl.setPower(0);
-            rColl.setPower(0);
-            driveVector(17, 180, 0.3, 0, 0, false);
-
-
-            turnHeading(0.3, 90);
-            driveVector(54, 270, 0.7, 0, 90, true);
+            driveVector(34, 90, 0.4, 0, 0, true);
+            turnHeading(0.4, 45);
             setCollect(-0.6);
-
-            waitSec(2);
+            driveVector(24, 0, 0.3, 0, 45, false);
             setCollect(0);
-            lColl.setPower(0);
-            rColl.setPower(0);
-
-            driveVector(49.25, 90, 0.7, 0, 90, true);
-            turnHeading(0.3, -35);
-            lColl.setPower(1);
-            rColl.setPower(1);
-            driveVectorRot(27, 0, 0.4, 0, 45 , false);
-            turnHeading(0.4, 0);
-            lColl.setPower(0);
-            rColl.setPower(0);
-            driveVector(10.5, 180, 0.4, 0, 0, false);
-
-            turnHeading(0.3, 90);
-            driveVector(69, 270, 0.7, 0, 90, true);
-            setCollect(-0.6);
-
-            waitSec(1);
+            turnHeading(0.4, 90);
+            driveVector(20, 180, 0.4, 0, 90, true);
+            driveVector(80, -90, 0.5, 0, 90, true);
+            setCollect(0.8);
+            driveVector(27, 90, 0.5, 0, 90, true);
             setCollect(0);
-            lColl.setPower(0);
-            rColl.setPower(0);
-
-            driveVectorRot(8, 90, 0.7, 0, 90, false);
+            stop();
 
         }
-
-        stop();
 
     }
 

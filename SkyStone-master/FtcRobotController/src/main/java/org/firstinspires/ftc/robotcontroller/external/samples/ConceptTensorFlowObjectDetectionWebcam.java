@@ -69,8 +69,7 @@ public class ConceptTensorFlowObjectDetectionWebcam extends LinearOpMode {
      * and paste it in to your code on the next line, between the double quotes.
      */
     private static final String VUFORIA_KEY =
-            " -- YOUR NEW VUFORIA KEY GOES HERE  --- ";
-
+        "AeZpymf/////AAABmS03EkjpbEZAmqpo0r8H+RFmyvabiay9wA3Vp8xwE8mULQirD/3HvaOjEt8kegr9ER4fBTw5Um3+oT7VcI04wAFdW3VILaGHxhqM8mAyU5QxJnRsOCM8i4ZaRp758aMfY9MwPwEh1TjHR4fnY9LsiQ5WpP7bgWflioTUCP3CiWytU6pS2575KItpWOhRVer2MIky5KsFf9mnZoj69AhT3tz+Jj0+wm48gV1eMOawb7j8STSUG6jWODEHmxiriknKuP/6U4fpfT4wSCMbdl4PwcTG6gHjnRp93RUkCnGZalGg2BGeXXHwJLEowRU4b5wO0SbsBlJtsQ3KlFuJbSWllsjpqvt9qFI4ykn4dSMxueky";
     /**
      * {@link #vuforia} is the variable we will use to store our instance of the Vuforia
      * localization engine.
@@ -161,8 +160,9 @@ public class ConceptTensorFlowObjectDetectionWebcam extends LinearOpMode {
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
             "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-       tfodParameters.minimumConfidence = 0.8;
+       tfodParameters.minimumConfidence = 0.6;
        tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
+
     }
 }
