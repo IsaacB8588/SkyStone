@@ -326,6 +326,58 @@ public abstract class AutoBase extends RobotHardware {
 
     }
 
+    protected void turnFoundation(double power, int degreeTarget) {
+        heading = getAngle();
+
+        //turn at full power until within 30 degrees of target
+        while (opModeIsActive() && Math.abs(heading - degreeTarget) > 1) {
+
+            if (heading > degreeTarget) {
+                setDrivePower(-power, power, -power, power);
+            }
+            if (heading < degreeTarget) {
+                setDrivePower(power, -power, power, -power);
+            }
+            heading = getAngle();
+            double angle = getGlobal();
+
+            telemetry.addData("Heading: ", heading);
+            telemetry.update();
+        }
+
+        stopDrive();
+
+        telemetry.addLine("Turned to " + degreeTarget + " degrees");
+        telemetry.update();
+
+    }
+
+    protected void turnGlobal(double power, double degreeTarget) {
+        heading = (int)getGlobal();
+
+        //turn at full power until within 30 degrees of target
+        while (opModeIsActive() && Math.abs(heading - degreeTarget) > 1) {
+
+            if (heading > degreeTarget) {
+                setDrivePower(-power, power, -power, power);
+            }
+            if (heading < degreeTarget) {
+                setDrivePower(power, -power, power, -power);
+            }
+
+            heading = (int)getGlobal();
+
+            telemetry.addData("Heading: ", heading);
+            telemetry.update();
+        }
+
+        stopDrive();
+
+        telemetry.addLine("Turned to " + degreeTarget + " degrees");
+        telemetry.update();
+
+    }
+
     /**
      * resets the angle of the gyroscope method
      */
