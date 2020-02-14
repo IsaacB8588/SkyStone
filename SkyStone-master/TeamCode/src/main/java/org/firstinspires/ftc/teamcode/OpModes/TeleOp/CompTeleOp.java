@@ -20,6 +20,16 @@ public class CompTeleOp extends RobotHardware {
         boolean flipped = false;
         int flipCount = 0;
 
+        boolean stoneGrabBoolean = false;
+        int stoneGrabCount = 0;
+        boolean stoneArmBoolean = false;
+        int stoneArmCount = 0;
+
+        boolean fullUp = false;
+        int fullUpCount = 0;
+
+
+
         waitForStart();
         while(opModeIsActive()){
 
@@ -103,7 +113,55 @@ public class CompTeleOp extends RobotHardware {
                 hookR.setPosition(1);
             }
 
-            telemetry.addData("current", getGlobal() % 360);
+
+            if (gamepad1.x){
+                fullUpCount++;
+            } else {
+                fullUpCount = 0;
+            }
+
+            if (fullUpCount == 1){
+                fullUp = !fullUp;
+            }
+
+            if (gamepad1.dpad_up){
+                stoneArmCount++;
+            } else {
+                stoneArmCount = 0;
+            }
+
+            if (stoneArmCount == 1){
+                stoneArmBoolean = !stoneArmBoolean;
+                if (!stoneArmBoolean){
+                    if (fullUp){
+                        stoneArm.setPosition(1);
+                    } else {
+                        stoneArm.setPosition(0.5);
+                    }
+                } else {
+                    stoneArm.setPosition(0);
+                }
+            }
+
+            if (gamepad1.dpad_down){
+                stoneGrabCount++;
+            } else {
+                stoneGrabCount = 0;
+            }
+
+            if (stoneGrabCount == 1){
+                stoneGrabBoolean = !stoneGrabBoolean;
+                if (!stoneGrabBoolean){
+                    stoneGrab.setPosition(0);
+                } else {
+                    stoneGrab.setPosition(1);
+                }
+            }
+
+
+
+            telemetry.addData("Heading: ", getGlobal() % 360);
+            telemetry.addData("Arm Full Up: ", fullUp);
             telemetry.update();
 
         }

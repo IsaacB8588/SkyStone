@@ -433,7 +433,7 @@ public abstract class AutoBase extends RobotHardware {
         do{
             setDrivePower(((radius + 7) / Math.max((radius + 7), (radius - 7)) * power), ((radius - 7) / Math.max((radius + 7), (radius - 7)) * power), ((radius + 7) / Math.max((radius + 7), (radius - 7)) * power), ((radius - 7) / Math.max((radius + 7), (radius - 7)) * power));
 
-        }while(Math.abs(getAngle()) < Math.abs(angle) && opModeIsActive());
+        }while(Math.abs(getGlobal()) < Math.abs(angle) && opModeIsActive());
 
         setDrivePower(0,0,0,0 );
     }

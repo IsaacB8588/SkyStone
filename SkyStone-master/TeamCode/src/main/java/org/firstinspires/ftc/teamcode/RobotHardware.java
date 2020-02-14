@@ -34,6 +34,7 @@ public abstract class RobotHardware extends RobotBase {
     protected Servo hookR;
 
     protected Servo stoneArm;
+    protected Servo stoneGrab;
 
     protected BNO055IMU imu;
 
@@ -104,6 +105,7 @@ public abstract class RobotHardware extends RobotBase {
         hookR.setPosition(1);
 
         stoneArm = hardwareMap.servo.get("stone");
+        stoneGrab = hardwareMap.servo.get("stoneg");
 
         //initialize gyro
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
@@ -122,7 +124,8 @@ public abstract class RobotHardware extends RobotBase {
         telemetry.update();
 
         if (robotRunType == RobotRunType.AUTONOMOUS){
-            stoneArm.setPosition(0);
+            stoneArm.setPosition(1);
+            stoneGrab.setPosition(1);
         }
 
         //post to telemetry when gyro is calibrated

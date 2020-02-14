@@ -6,8 +6,8 @@ import org.firstinspires.ftc.teamcode.AutoBase;
 import org.firstinspires.ftc.teamcode.RobotRunType;
 import org.firstinspires.ftc.teamcode.Tests.SkystonePosition;
 
-@Autonomous(name = "blue - all - 0 - bridge")
-public class BlueAll0Bridge extends AutoBase {
+@Autonomous(name = "red - all - 0 - bridge")
+public class RedAll0Bridge extends AutoBase {
 
     public void runOpMode() {
 
@@ -22,7 +22,7 @@ public class BlueAll0Bridge extends AutoBase {
 
         driveVectorRot(24, 0, 0.5, 0, 0, true);
         waitSec(2);
-        SkystonePosition position = getSkyPos(true);
+        SkystonePosition position = getSkyPos(false);
         stoneArm.setPosition(0);
         stoneGrab.setPosition(0);
 
@@ -34,62 +34,62 @@ public class BlueAll0Bridge extends AutoBase {
 
         if (position == SkystonePosition.LEFT){
 
-            distance1 = 1;
+            distance1 = 12;
             direction1 = -90;
-            distance2 = 80;
-            distance3 = 20;
-            distance4 = 66;
+            distance2 = 108;
+            distance3 = 0;
+            distance4 = 82;
 
         } else if (position == SkystonePosition.CENTER){
 
-            distance1 = 9;
-            direction1 = 90;
-            distance2 = 88;
+            distance1 = 2;
+            direction1 = -90;
+            distance2 = 100;
             distance3 = 10;
             distance4 = 76;
 
         } else {
 
-            distance1 = 19;
+            distance1 = 7;
             direction1 = 90;
-            distance2 = 96;
-            distance3 = 0;
-            distance4 = 82;
+            distance2 = 92;
+            distance3 = 20;
+            distance4 = 66;
 
         }
 
-        hookL.setPosition(0.7);
+        //hookR.setPosition(0.3);
         driveVector( distance1, direction1, 0.5, 0, 0, true);
-        turnGlobal(0.5, 180);
-        turnGlobal(0.2, 180);
-        driveVector(10, 0, 0.4, 0, 180, true);
+        turnGlobal(0.5, -180);
+        turnGlobal(0.2, -180);
+        driveVector(10, 0, 0.4, 0, -180, true);
         waitSec(0.2);
         stoneGrab.setPosition(0.7);
         waitSec(1);
         stoneArm.setPosition(0.5);
         waitSec(0.5);
-        driveVector(6, 180, 0.4, 0, 180, true);
-        turnGlobal(0.5, 270);
-        turnGlobal(0.2, 270);
-        driveVector(distance2, -90, 0.5, 0, 270, true);
+        driveVector(6, 180, 0.4, 0, -180, true);
+        turnGlobal(0.5, -270);
+        turnGlobal(0.2, -270);
+        driveVector(distance2, 90, 0.5, 0, -265, true);
 
-        turnGlobal(0.5, 180);
-        turnGlobal(0.2, 180);
-        driveVector(10, 0, 0.4, 0, 180, true);
+        turnGlobal(0.5, -180);
+        turnGlobal(0.2, -180);
+        driveVector(10, 0, 0.4, 0, -180, true);
         stoneArm.setPosition(0);
         waitSec(0.5);
         stoneGrab.setPosition(0);
         waitSec(0.5);
         stoneArm.setPosition(0.5);
-        driveVector(9, 90, 0.5, 0, 180, true);
-        driveVector(4, 0, 0.4, 0, 180, false);
+        driveVector(11, -90, 0.5, 0, -180, true);
+        driveVector(4, 0, 0.4, 0, -180, false);
         setHooks(true);
         waitSec(1);
-        driveVector(20, 180, 0.5, 0, 180, false);
-        turnGlobal(0.5, 270);
-        driveVector(8, 270, 0.5, 0, 270, false);
+        driveVector(23, 180, 0.5, 0, -180, false);
+        turnGlobal(0.5, -270);
+        driveVector(8, 90, 0.5, 0, -270, false);
         setHooks(false);
-        driveVector(50, 75, 0.5, 0, 270, false);
+        driveVector(50, -75, 0.5, 0, -270, false);
         stoneArm.setPosition(0);
         waitSec(0.5);
 

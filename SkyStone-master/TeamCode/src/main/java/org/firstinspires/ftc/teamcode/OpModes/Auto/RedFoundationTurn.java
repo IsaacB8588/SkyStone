@@ -21,7 +21,7 @@ public class RedFoundationTurn extends AutoBase {
         turnFoundation(0.45, -90);
         driveVector(8, 270, 0.3, 0, -90, false);
         setHooks(false);
-        driveVector(10, 0, 0.4, 0, -90, true);
+        driveVector(12, 0, 0.4, 0, -90, true);
         turnHeading(0.4, -90);
         driveVector(45, 90, 0.4, 0, -90, true);
 
