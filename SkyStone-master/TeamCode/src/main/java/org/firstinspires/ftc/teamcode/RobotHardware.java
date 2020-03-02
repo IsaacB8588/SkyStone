@@ -223,7 +223,7 @@ public abstract class RobotHardware extends RobotBase {
      *
      * @return double - unrestricted gyroscope value of the robot
      */
-    protected double getGlobal(){
+    public double getGlobal(){
         angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
         double deltaAngle = angles.firstAngle - lastAngles.firstAngle;
